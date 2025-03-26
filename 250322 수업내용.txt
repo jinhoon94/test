@@ -1,0 +1,25 @@
+docker에 nginx와 mariadb 설치
+
+MySQL에 docker containers의 mariadb 연결 
+
+vscode 
+lombok / Spring Initializr Java Support / gradle 설치
+
+ctrl+p로 파일생성 java 17 
+spring web / lombok / gradle / mariadb 선택
+
+ctrl+shift+p clean하면 컴파일다시됨
+
+포스트맨 설치 -> 백앤드 테스트에 사용할거임
+
+PuTTY 설치 
+주소  		       포트
+tomhoon.duckdns.org    20022
+
+tlgus0020  project0000!
+
+ERD
+지점 결제 메뉴 문자 재고
+
+[컴파일 안될시 gradle 추가]
+compileOnly 'org.springframework.boot:spring-boot-devtools'//how swap
