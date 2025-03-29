@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.kiosk.stock.repository.StockMapper">
+
+<select id="selectStockByPlace" resultType="com.my.kiosk.stock.classes.Stock">
+        SELECT * FROM stock
+        WHERE placeId = #{placeId}
+</select>
+
+<select id="findAll" resultType="com.my.kiosk.stock.classes.Stock">
+        SELECT * FROM stock
+</select>
+
+<insert id="newStock" parameterType="com.my.kiosk.stock.classes.Stock">
+        INSERT INTO stock (menuId, placeId, stockQty, date)
+        VALUES (#{menuId}, #{placeId}, #{stockQty}, #{date})
+</insert>
+
+<update id="plusStock" parameterType="com.my.kiosk.stock.classes.Stock">
+        UPDATE stock
+        SET stockQty = #{stockQty}
+        WHERE menuId = #{menuId} AND placeId = #{placeId}
+</update>
+
+<update id="minusStock" parameterType="com.my.kiosk.stock.classes.Stock">
+        UPDATE stock
+        SET stockQty = #{stockQty}
+        WHERE menuId = #{menuId} AND placeId = #{placeId}
+</update>
+
+<select id="findStockByMenuIdAndPlaceId" resultType="com.my.kiosk.stock.classes.Stock">
+        SELECT * FROM stock
+        WHERE menuId = #{menuId} AND placeId = #{placeId}
+        LIMIT 1
+</select>
+
+<insert id="stockIn" parameterType="com.my.kiosk.stock.classes.StockIn">
+        INSERT INTO stock_in (menuId, placeId, amount, date)
+        VALUES (#{menuId}, #{placeId}, #{amount}, #{date})
+</insert>
+
+<insert id="stockOut" parameterType="com.my.kiosk.stock.classes.StockOut">
+        INSERT INTO stock_out (menuId, placeId, amount, date)
+        VALUES (#{menuId}, #{placeId}, #{amount}, #{date})
+</insert>
+
+<select id="stockInfindAll" resultType="com.my.kiosk.stock.classes.StockIn">
+        SELECT * FROM stock_in
+</select>
+
+<select id="stockOutfindAll" resultType="com.my.kiosk.stock.classes.StockOut">
+        SELECT * FROM stock_out
+</select>
+</mapper>
