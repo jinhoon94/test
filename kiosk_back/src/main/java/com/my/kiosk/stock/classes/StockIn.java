@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 package com.my.kiosk.stock.classes;
 
 import java.sql.Date;
@@ -33,3 +34,25 @@ public class StockIn {
 	@Column(nullable = false)
 	private Date date;
 }
+=======
+package com.my.kiosk.stock.classes;
+
+import java.sql.Date;
+
+import lombok.Data;
+
+@Data
+
+public class StockIn {
+
+	private int id;
+
+	private int menuId;
+
+	private int placeId;
+
+	private int amount;
+
+	private Date date;
+}
+>>>>>>> Stashed changes
