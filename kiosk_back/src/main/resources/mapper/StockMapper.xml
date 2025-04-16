@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+
+<mapper namespace="com.my.kiosk.stock.repository.StockMapper">
+
+    <select id="findByPlaecID" resultType="com.my.kiosk.stock.classes.Stock">
+	select * from stock where place_id=#{place_id}
+	</select>
+
+	<select id="findAll" resultType="com.my.kiosk.stock.classes.Stock">
+	    SELECT * FROM stock
+	</select>
+
+	<select id="getStock" resultType="com.my.kiosk.stock.classes.Stock">
+	    SELECT * FROM stock WHERE menu_id = #{menu_id} AND place_id = #{place_id}
+	</select>
+	
+    <update id="updateStock" parameterType="com.my.kiosk.stock.classes.Stock">
+        <if test="stock_qty != null">
+            UPDATE stock
+            SET stock_qty = #{stock_qty}
+            WHERE menu_id = #{menu_id} AND place_id = #{place_id}
+        </if>
+    </update>
+
+    <!-- 입고 데이터 삽입 -->
+    <update id="increaseStockQty">
+	  UPDATE stock
+	  SET stock_qty = stock_qty + #{amount}
+	  WHERE menu_id = #{menuid} AND place_id = #{placeid}
+	</update>
+	
+    <insert id="insertStockIn" parameterType="com.my.kiosk.stock.classes.StockIn">
+        INSERT INTO stock_in (menu_id, place_id, amount, date)
+        VALUES (#{menu_id}, #{place_id}, #{amount}, #{date})
+    </insert>
+
+    <!-- 출고 데이터 삽입 -->
+    <insert id="insertStockOut" parameterType="com.my.kiosk.stock.classes.StockOut">
+        INSERT INTO stock_out (menu_id, place_id, amount, date)
+        VALUES (#{menu_id}, #{place_id}, #{amount}, CURDATE())
+    </insert>
+	
+	<select id="getStockOutById" resultType="com.my.kiosk.stock.classes.StockOut">
+ 		 select * from stock_out WHERE id = #{id}
+	</select>
+	
+	
+	<select id="thereIsSameOrderBefore" resultType="com.my.kiosk.stock.classes.StockOut">
+		select * from stock_out where menu_id = #{param1} and place_id = #{param2} order by id desc, date desc limit 1;	
+	</select>
+	
+	<insert id="insertStockOrder">
+	   insert into menu_order (out_id, state, amount) values(#{outid},2,#{amount})
+	</insert>
+	
+	<insert id="insertOrder">
+        INSERT INTO menu_order (out_id, state, amount)
+        VALUES (#{outid}, 2, #{amount})
+    </insert>
+    
+	<select id="getStockOrderState" resultType="com.my.kiosk.stock.classes.MenuOrder">
+		SELECT * FROM menu_order WHERE out_id = #{out_id}	
+	</select>
+	
+	<update id="updateStockOrderState">
+			update menu_order set state = #{state}  WHERE out_id = #{outid}
+	</update>
+	<update id="updateStockOrder">
+		update menu_order set out_id = #{param1}, state=0 where id=(select id from menu_order where out_id = #{param2} limit 1)
+	</update>
+	
+	<select id="getPlaceName">
+		select name from place where id=#{param1};	
+	</select>
+	
+	<select id="getMenuName">
+		select name from menu where id=#{param1};	
+	</select>
+	
+	<update id="setRetire">
+		UPDATE menu
+		SET state = CASE state
+		               WHEN 0 THEN 1
+		               WHEN 1 THEN 0
+		            END
+		WHERE id = #{param1};
+	</update>
+	
+	<update id="setRetireStock">
+		UPDATE stock
+		SET selling = CASE selling
+		               WHEN 0 THEN 1
+		               WHEN 1 THEN 0
+		            END
+		WHERE menu_id = #{param1} and place_id = #{param2};
+	</update>
+	
+	<select id="isRetired" resultType="java.lang.Integer">
+		select state from menu where id=#{param1};
+	</select>
+	
+	<!-- 로그인처리 -->
+	<select id="findByUserId" resultType="com.my.kiosk.stock.classes.User">
+		select * from user where userid=#{userid}
+	</select>
+	
+	<select id="getPlaceNames">
+	    select name from place;
+	</select>
+	
+	<select id="getPlaceId">
+		select id from place;
+	</select>
+	
+	<select id="getPlaceSellingById" resultType="java.lang.Integer">
+		select selling from stock where menu_id=#{param1} and place_id=#{param2};
+	</select>
+	
+	<!-- 메뉴 처리 -->
+	<select id="getAllMenu" resultType="com.my.kiosk.stock.classes.Menu">
+		select * from menu;
+	</select>
+	
+
+	<select id="getStockTotalList" resultType="com.my.kiosk.stock.classes.StockListDTO">
+		SELECT 
+	    p.name AS place_name,
+	    m.name AS menu_name,
+	    m.img AS img_path,
+	    s.stock_qty,
+	    m.state AS product_state,
+	    o.state AS order_state,
+	    s.menu_id,
+    	s.place_id
+		FROM stock s
+		JOIN menu m ON s.menu_id = m.id
+		JOIN place p ON s.place_id = p.id
+		LEFT JOIN (
+	    SELECT so.menu_id, so.place_id, MAX(mo.id) AS latest_order_id
+	    FROM menu_order mo
+	    JOIN stock_out so ON mo.out_id = so.id
+	    GROUP BY so.menu_id, so.place_id
+	) lo ON s.menu_id = lo.menu_id AND s.place_id = lo.place_id
+	LEFT JOIN menu_order o ON o.id = lo.latest_order_id
+
+
+	</select>
+
+	<insert id="saveMenu" parameterType="com.my.kiosk.stock.classes.Menu" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO menu (name, code, img, state)
+        VALUES (#{name}, #{code}, #{img}, #{state})
+    </insert>
+
+	<select id="findMenuByCode" resultType="int">
+	    SELECT id FROM menu WHERE code = #{code}
+	</select>
+	
+	<select id="findPlaceIdAll" resultType="java.lang.Integer">
+    	SELECT id FROM place
+	</select>
+	
+	<insert id="setupInitialStock">
+	    INSERT INTO stock (menu_id, place_id, stock_qty, date)
+	    VALUES (#{menuId}, #{placeId}, 0, NOW())
+	</insert>
+
+	<select id="findMenuById" resultType="com.my.kiosk.stock.classes.Menu">
+		select * from menu where id = #{id}
+	</select>
+
+	<update id="productSell" parameterType="com.my.kiosk.stock.classes.Stock">
+            UPDATE stock
+            SET stock_qty = #{stock_qty}
+            WHERE menu_id = #{menu_id} AND place_id = #{place_id}
+    </update>
+
+</mapper>

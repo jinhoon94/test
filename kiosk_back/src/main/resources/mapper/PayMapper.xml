@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.my.kiosk.pay.repository.PayMapper">
+    <select id="findAll" resultType="com.my.kiosk.pay.classes.Pay">
+        SELECT * FROM pay
+    </select>
+    
+    <select id="findById" parameterType="int" resultType="com.my.kiosk.pay.classes.Pay">
+    	SELECT * FROM pay WHERE id = #{id}
+	</select>
+	
+	<select id="findByPayNum" parameterType="Long" resultType="com.my.kiosk.pay.classes.Pay">
+    	select * from pay where pay_num = #{pay_num}
+    </select>
+    
+    <select id="findSizeById" parameterType="int" resultType="com.my.kiosk.global.classes.Size">
+    	SELECT * FROM size WHERE id = #{id}
+	</select>
+	
+	<select id="findPlaceById" parameterType="int" resultType="com.my.kiosk.place.classes.Place">
+    	SELECT * FROM place WHERE id = #{id}
+	</select>
+	
+	<select id="findPayDetailByPayId" parameterType="int" resultType="com.my.kiosk.pay.classes.PayDetail">
+        SELECT * FROM pay_detail WHERE pay_id = #{id}
+    </select>
+    
+    
+    <select id="findMenuNameById" parameterType="int" resultType="java.lang.String">
+        SELECT name FROM menu WHERE id = #{menuId}
+    </select>
+
+    <select id="findPayByDate" parameterType="java.time.LocalDateTime" resultType="com.my.kiosk.pay.classes.Pay">
+        SELECT * FROM pay WHERE pay_date BETWEEN #{start} AND #{end}
+    </select>
+    
+    <select id="findAllFast" resultType="com.my.kiosk.pay.classes.PayDTO">
+	  SELECT 
+	    p.id,
+	    p.pay_method,
+		GROUP_CONCAT(s.size SEPARATOR ',') as size,
+	    sum(s.price) as price,
+	    p.pay_date,
+	    pl.name AS pay_place,
+	    p.pay_num
+	  FROM pay p
+	  JOIN size s ON s.id = p.size_id
+	  JOIN place pl ON p.place_id = pl.id
+	  GROUP BY p.pay_num
+	  
+	</select>
+	
+	
+	<select id="findAllPage" resultType="com.my.kiosk.pay.classes.PayDTO">
+		SELECT 
+		  MAX(p.id) AS id,   
+		  MAX(p.pay_method) AS pay_method,
+		  GROUP_CONCAT(s.size SEPARATOR ',') AS size,
+		  SUM(s.price) AS price,
+		  MAX(p.pay_date) AS pay_date, 
+		  pl.name AS pay_place,
+		  p.pay_num
+		FROM pay p
+		JOIN size s ON s.id = p.size_id
+		JOIN place pl ON p.place_id = pl.id
+		GROUP BY p.pay_num
+		ORDER BY MAX(p.id) DESC 
+		LIMIT #{startnum}, #{pagesize};
+	  
+	</select>
+	
+	<select id="countPayNum">
+		SELECT COUNT(DISTINCT pay_num) AS total_count FROM pay
+	</select>
+	
+	<select id="findPayFastByDate" resultType="com.my.kiosk.pay.classes.PayDTO" parameterType="map">
+	  SELECT 
+	    p.id,
+	    p.pay_method,
+		GROUP_CONCAT(s.size SEPARATOR ',') as size,
+	    sum(s.price) as price,
+	    p.pay_date,
+	    pl.name AS pay_place,
+	    p.pay_num
+	  FROM pay p
+	  JOIN size s ON s.id = p.size_id
+	  JOIN place pl ON p.place_id = pl.id
+	  WHERE p.pay_date BETWEEN #{start} AND #{end}
+	  GROUP BY p.pay_num
+	</select>
+	
+    <!-- 결제정보넣기 테스트 -->
+    <insert id="insert" parameterType="com.my.kiosk.pay.classes.Pay" useGeneratedKeys="true" keyProperty="id">
+	    insert into pay (size_id, place_id, pay_method, pay_num, pay_date)
+	    values (#{size_id}, #{place_id}, #{pay_method}, #{pay_num}, #{pay_date})
+	</insert>
+    
+    <insert id="insertPayDetail">
+    	insert into pay_detail values(null, #{pay_id}, #{menu})
+    </insert>
+    
+    <!--     test       -->
+</mapper>
