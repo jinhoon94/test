@@ -1,0 +1,33 @@
+body {
+    width: 1024px;
+    height: 1562px;
+    background-color: #F9D1D7;
+}
+
+header {
+    height:114px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button-container {
+    display : flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.location-button {
+    background-color: #D0E8F4;
+    color: white;
+    border : none;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 120px;
+    height: 200px;
+}
+
+.location-button:hover {
+    background-color: #87C1D4; /* 버튼 호버 시 색상 변화 */
+}
