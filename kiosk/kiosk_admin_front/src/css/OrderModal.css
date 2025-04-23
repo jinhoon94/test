@@ -1,0 +1,125 @@
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 320px;
+  padding: 32px 24px;
+  background: white;
+  border-radius: 16px;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 이미지 크기 + 간격 */
+.modal-image {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 16px;
+}
+
+/* 메뉴명 */
+.modal h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* 수량 조절 영역 */
+.quantity {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.quantity button {
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  border: none;
+  border-radius: 50%;
+  background-color: #eee;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.quantity span {
+  font-size: 18px;
+  width: 28px;
+  display: inline-block;
+  text-align: center;
+}
+
+/* 버튼들 */
+.modal-buttons {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+}
+
+.cancel-btn,
+.confirm-btn {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.confirm-btn {
+  background-color: #6D5BD0;
+  color: white;
+}
+
+
+
+.confirm-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.confirm-box {
+  background: #f6f3ff;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+}
+.confirm-box p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+.button-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.yes-btn {
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+.no-btn {
+  background: #6d4dd3;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+

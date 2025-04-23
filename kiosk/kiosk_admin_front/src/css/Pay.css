@@ -1,0 +1,314 @@
+.pay-container {
+  padding: 2rem;
+  font-family: 'Pretendard', sans-serif;
+  overflow-x: auto; /* 테이블 깨짐 방지 */
+}
+
+.pay-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* 테이블 컬럼 너비: 현재 구조 기준 (7개) */
+.pay-table th:nth-child(1) { width: 60px; }   /* NO */
+.pay-table th:nth-child(2) { width: 100px; }  /* 결제수단 */
+.pay-table th:nth-child(3) { width: 160px; }  /* 결제내역 */
+.pay-table th:nth-child(4) { width: 100px; }  /* 결제금액 */
+.pay-table th:nth-child(5) { width: 180px; }  /* 결제일 */
+.pay-table th:nth-child(6) { width: 120px; }  /* 결제지점 */
+.pay-table th:nth-child(7) { width: 160px; }  /* 결제일련번호 */
+
+.pay-table thead {
+  background-color: #F4F2FF;
+  color: #4a3f7d;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.pay-table th,
+.pay-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+}
+
+.pay-table tbody tr:hover {
+  background-color: #f7f5fc;
+  cursor: pointer;
+}
+
+/* 상단 필터 버튼들 */
+.date-btn {
+  background-color: #fff;
+  border: 1px solid #000;
+  width: 88px;
+  height: 40px;
+}
+
+.place-btn {
+  width: 99px;
+  height: 39px;
+  background-color: #D8D8D8;
+  color: #7A7A7A;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.place-btn.selected {
+  background-color: #6D5BD0;
+  color: white;
+}
+
+/* 입력창 */
+.search-input {
+  background-color: #f4f2ff;
+  width: 392px;
+  height: 40px;
+  box-sizing: border-box;
+  border: none;
+  padding: 0 10px;
+}
+
+/* 모달용 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.modal-date {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 443px;
+  height: 417px;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 캘린더용 (추가적으로 분리된 경우 대비) */
+.calendar-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 443px;
+  height: 417px;
+  background-color: white;
+  z-index: 1001;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* 상태 뱃지 (추후 사용 예정 대비 유지) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dot.orange { background-color: #f97316; }
+.dot.purple { background-color: #a855f7; }
+.dot.green  { background-color: #22c55e; }
+.dot.gray   { background-color: #9ca3af; }
+
+.badge-waiting {
+  background-color: #fff7ed;
+  color: #ea580c;
+}
+
+.badge-progress {
+  background-color: #f3e8ff;
+  color: #9333ea;
+}
+
+.badge-success {
+  background-color: #ecfdf5;
+  color: #16a34a;
+}
+
+.badge-unknown {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.pay-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap; /* 지점 버튼 많을 경우 자동 줄바꿈 */
+}
+
+.pay-filters .date-btn {
+
+  border: 1px solid #C6C2DE;
+  width: 88px;
+  height: 40px;
+  border-radius: 6px;
+}
+
+.pay-filters .search-input {
+  background-color: #f4f2ff;
+  width: 392px;
+  height: 40px;
+  padding: 0 10px;
+  border: none;
+  box-sizing: border-box;
+  border-radius: 6px;
+  font-family: inter;
+  font-size: 12px;
+}
+
+.pay-filters .place-btn {
+  width: 99px;
+  height: 39px;
+  background-color: #D8D8D8;
+  color: #7A7A7A;
+  border-radius: 6px;
+  border: none;
+  transition: 0.2s;
+}
+
+.pay-filters .place-btn.selected {
+  background-color: #6D5BD0;
+  color: white;
+}
+
+.pay-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+
+}
+
+.date-btn {
+  background-color: #fff;
+  border: 1px solid #C6C2DE;
+  width: 88px;
+  height: 40px;
+}
+
+.search-input {
+  background-color: #f4f2ff;
+  width: 392px;
+  height: 40px;
+  box-sizing: border-box;
+  border: none;
+  padding: 0 10px;
+}
+
+.place-btn {
+  width: 99px;
+  height: 39px;
+  background-color: #D8D8D8;
+  color: #7A7A7A;
+  border-radius: 6px;
+  border: none;
+  transition: 0.2s;
+}
+
+.place-btn.selected {
+  background-color: #6D5BD0;
+  color: white;
+}
+
+/* 재고없음 뱃지 */
+.badge-outofstock {
+  background-color: #f5f2fd;
+  color: #6b5ca5;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dot.purple {
+  width: 8px;
+  height: 8px;
+  background-color: #6b5ca5;
+  border-radius: 50%;
+}
+
+.badge-sale {
+  background-color: #f2f1ff;
+  color: #5645d9;
+}
+
+.badge-stop {
+  background-color: #ffecec;
+  color: #d03c3c;
+}
+
+.dot.red {
+  background-color: #d03c3c;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+
+.pagination-controls button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pagination-controls button:hover {
+  background-color: #357ac9;
+}
+
+.pagination-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #666;
+}
